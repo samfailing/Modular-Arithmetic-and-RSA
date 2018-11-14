@@ -63,6 +63,7 @@ void ExtendedEuclidAlgGCD (int a, int b, int & s, int & t)
 	int temp2;  
 	stack <int> total; 
 	stack <int> divisor; 	
+	stack <int> multiplier; 	
 
 	while (b != 0 && a >= b){
 		temp1 = a; 
@@ -74,28 +75,30 @@ void ExtendedEuclidAlgGCD (int a, int b, int & s, int & t)
 			//store total and divisor into stack 
 			total.push(temp1);
 			divisor.push(a);
+			multiplier.push(temp1/temp2);
 		}
 		//cout << temp1 << " = " << a << "(" << (temp1/temp2) << ")" << " + " << b << endl;
 	};
-	int new_total=0;
-	int multi_one=1;
-	int multi_two;
+	int multi_one= 1;
+	int new_total =0; 
 
-	while (!total.empty() && !divisor.empty()){
+	while (!total.empty() && !divisor.empty() && !multiplier.empty()){
 		temp1 = total.top();
 		temp2 = divisor.top(); 
-		//base case 
-		if (new_total == 0){
+		int multi_two = -multiplier.top();
+		
+		if (new_total==0){
 			new_total = a - temp1;
-			multi_two=new_total/temp2; 
 		}
-		else{
+		else {
 			int temp_multi = multi_one;
 			multi_one = multi_two; 
 			multi_two= temp_multi * -temp2; 
 		}
+
 		total.pop();
 		divisor.pop();
+		multiplier.pop();
 
 		cout << a << "=" << temp1 << "(" << multi_one << ")" << "+" << temp2 << "(" << multi_two << ")" <<endl; 
 	};
