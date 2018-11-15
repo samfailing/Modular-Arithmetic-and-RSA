@@ -77,30 +77,23 @@ void ExtendedEuclidAlgGCD (int a, int b, int & s, int & t)
 			divisor.push(a);
 			multiplier.push(temp1/temp2);
 		}
-		//cout << temp1 << " = " << a << "(" << (temp1/temp2) << ")" << " + " << b << endl;
+		cout << temp1 << " = " << a << "(" << (temp1/temp2) << ")" << " + " << b << endl;
 	};
-	int multi_one= 1;
-	int new_total =0; 
-
+	int x, y =1, c, q =0;
+	t =1;
+	
 	while (!total.empty() && !divisor.empty() && !multiplier.empty()){
-		temp1 = total.top();
-		temp2 = divisor.top(); 
-		int multi_two = -multiplier.top();
+		x =total.top(); 
+		s = t; 
+		c = divisor.top(); 
+		t = (t*-multiplier.top())+q;
+
+		cout << x << "(" << s << ")" << "+" << c << "(" << t << ")" <<endl; 
 		
-		if (new_total==0){
-			new_total = a - temp1;
-		}
-		else {
-			int temp_multi = multi_one;
-			multi_one = multi_two; 
-			multi_two= temp_multi * -temp2; 
-		}
+		q = s;		
 
 		total.pop();
 		divisor.pop();
 		multiplier.pop();
-
-		cout << a << "=" << temp1 << "(" << multi_one << ")" << "+" << temp2 << "(" << multi_two << ")" <<endl; 
 	};
 }
-
