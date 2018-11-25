@@ -17,27 +17,7 @@ int EuclidAlgGCD (int a, int b){
       return b;
    if (b==0)
       return a;
-};
-
-/* precondition: a>=b>=0 */
-/* postcondition: return d=gcd(a,b), s and t are set so that d=sa+tb */
-int ExtendedEuclidAlgGCD (int a, int b, int *s, int *t){
-  if (a ==0){
-    *s = 0;
-    *t = 1;
-    return b;
-  }
-
-  int x, y; // stores results of recursive call
-  int gcd = ExtendedEuclidAlgGCD(b%a, a, &x, &y);
-
-  // Update s and t using results of recursive
-
-  *s = y - (b/a) * x;
-  *t = x;
-
-  return gcd;
-};
+}
 
 /* precondition: n is greater than 1,a can be negative
 postcondition: return a mod n (as defined in class)
@@ -61,6 +41,40 @@ int mod (int a, int n){
   }
 };
 
+/* precondition: a>=b>=0 */
+/* postcondition: return d=gcd(a,b), s and t are set so that d=sa+tb */
+int ExtendedEuclidAlgGCD (int a, int b, int &s, int &t){
+  if (a ==0)
+    return b;
+  if (b == 0 )
+    return a;
+
+  s = 0;
+  t = 1;
+
+  int rem = mod(a, b);
+  int gcd = ExtendedEuclidAlgGCD(b, rem, s, t);
+
+  // Update s and t using results of recursive
+
+  if(rem > 0)
+  {
+    if(s == 0)
+    {
+      t = -(a/b); 
+      s = 1; 
+    }
+    else
+    {
+      int temp = s;
+      s = t;
+      t = s * -(a/b) + temp;
+    }
+  }
+
+  return gcd;
+};
+
 /* n>1, a is nonnegative */
 /* a<=n */
 /* a and n are relative prime to each other */
@@ -68,7 +82,8 @@ int mod (int a, int n){
 int inverse (int a, int n)
 {
   int s, t;
-  int d = ExtendedEuclidAlgGCD (n, a, &s, &t);
+  int d = ExtendedEuclidAlgGCD (n, a, s, t);
+  cout << d << " = " << n << "(" << s << ")" << " + " << a << "(" << t << ")" << endl;
 
   if (d==1)
   {
@@ -141,8 +156,8 @@ int main(){
   int e = RelativelyPrime(phi);        //e
   // cout << "e is " << e << endl;
   // STEP 3 FUNCTION DOES NOT RETURN CORRECT VALUE
-  // int d = inverse(phi, e);             //gcd(phi, e)
-  // cout << "D using inverse is " << d << endl;
+   int D = inverse(e, phi);             //gcd(phi, e)
+   cout << "D using inverse is " << D << endl;
 
   int k = 2;
   while ((1+k*phi)%e != 0){
@@ -151,7 +166,7 @@ int main(){
   // cout << "The k is " << k << endl;
 
   int d = (1 + (k*phi))/e;
-  // cout << "The d is " << d << endl;
+   cout << "The d is " << d << endl;
 
   // STEP 6
   int M;
